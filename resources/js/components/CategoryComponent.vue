@@ -1,142 +1,125 @@
 <template>
     <div>
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Categorias</h1>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="./">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Categorias</li>
-            </ol>
-        </div>
-        <div class="modal fade" :class="{'mostrar':mostrarModal}" id="exampleModal" style="display:none" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeModal()">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label class="form-control-label" for="name">Nombre</label>
-                            <input type="text" id="name" pattern="[A-Za-z]" class="form-control" required 
-                                v-model="category.name" :class="[verifyName ? 'is-valid': 'is-invalid']">
-                                <template v-if="!verifyName">
-                                    <div class="invalid-feedback">
-                                        Ingrese el campo del nombre
-                                    </div>                                    
-                                </template>
-                                <template v-if="verifyName">
-                                    <div class="valid-feedback">
-                                        Campo ingresado correctamente
-                                    </div>                                    
-                                </template>
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" @change="getImage($event)">
-                            <label class="custom-file-label" for="image" :class="[verifyImage ? 'is-valid': 'is-invalid']">Seleccionar imagen</label>
-                                <template v-if="!verifyImage">
-                                    <div class="invalid-feedback">
-                                        Ingrese el campo del nombre
-                                    </div>                                    
-                                </template>
-                                <template v-if="verifyImage">
-                                    <div class="valid-feedback">
-                                        Campo ingresado correctamente
-                                    </div>                                    
-                                </template>
+        <form-component :showModal="showModal">
+            <template v-slot:title>
+                Categorias
+            </template>
+            <template v-slot:modal-header>
+                <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeModal()">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </template>
+            <template v-slot:modal-body>
+                <form class="form-horizontal" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="form-control-label" for="name">Nombre</label>
+                        <input type="text" id="name" pattern="[A-Za-z]" class="form-control" required 
+                            v-model="category.name" :class="[verifyName ? 'is-valid': 'is-invalid']">
+                            <template v-if="!verifyName">
+                                <div class="invalid-feedback">
+                                    Ingrese el campo del nombre
+                                </div>                                    
+                            </template>
+                            <template v-if="verifyName">
+                                <div class="valid-feedback">
+                                    Campo ingresado correctamente
+                                </div>                                    
+                            </template>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image" @change="getImage($event)">
+                        <label class="custom-file-label" for="image" :class="[verifyImage ? 'is-valid': 'is-invalid']">Seleccionar imagen</label>
+                            <template v-if="!verifyImage">
+                                <div class="invalid-feedback">
+                                    Ingrese el campo del nombre
+                                </div>                                    
+                            </template>
+                            <template v-if="verifyImage">
+                                <div class="valid-feedback">
+                                    Campo ingresado correctamente
+                                </div>                                    
+                            </template>
 
-                        </div>
-                        <span v-if="nameFile!=''" class="file-message text-primary">La imagen seleccionada es: {{nameFile}}</span>
-                    </form>
-                </div>
-                <div class="modal-footer d-flex justify-content-between">
-                    <template v-if="modalBtnAction == 1">
-                        <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
-                        <button type="button" class="btn btn-primary" @click="saveCategory()">Registrar</button>
-                    </template>
-                    <template v-if="modalBtnAction == 2">
-                        <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
-                        <button type="button" class="btn btn-primary" @click="modifyCategory()">Actualizar</button>
-                    </template>
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
+                    </div>
+                    <span v-if="nameFile!=''" class="file-message text-primary">La imagen seleccionada es: {{nameFile}}</span>
+                </form>
+            </template>
+            <template v-slot:modal-footer>
+                <template v-if="modalBtnAction == 1">
+                    <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @click="saveCategory()">Registrar</button>
+                </template>
+                <template v-if="modalBtnAction == 2">
+                    <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @click="modifyCategory()">Actualizar</button>
+                </template>
+            </template>            
+        </form-component>
+        <table-component>
+            <template v-slot:card-header>
                 <button type="button" class="btn btn-primary" @click="openModal('registrar')">
                     <i class="icon-plus"></i>&nbsp;Nuevo
                 </button>
-            </div>
-            <div class="card-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <select class="form-control col-md-3" v-model="criterio">
-                                <option value="name">Nombre</option>
-                            </select>
-                            <input type="text" 
-                                class="form-control" 
-                                placeholder="Texto a buscar" 
-                                v-model="buscar"
-                                @keyup.enter="getAllCategories(1, buscar, criterio)"
-                            >
-                            <button type="submit" class="btn btn-primary" @click="getAllCategories(1, buscar, criterio)"><i class="fa fa-search"></i> Buscar</button>
-                        </div>
-                    </div>
-                </div>
-                <table class="table table-striped align-items-center">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Imagen</th>
-                            <th>Estado</th>
-                            <th>Opciones</th>                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="category in categories" :key="category.id">
-                            <td>{{ category.id }}</td>
-                            <td>{{ category.name }}</td>
-                            <td><img :src="`images/categories/${category.image}`" width="40" height="40" alt=""></td>
-                            <td><span class="badge badge-success" v-if="category.status == '1'">activo</span>
-                                <span class="badge badge-warning" v-if="category.status == '0'">inactivo</span></td>
-                            <td>
-                                <button @click="openModal('actualizar', category)" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i></button>
-                                <template v-if="category.status">
-                                    <button @click="desactiveCategory(category.id)" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash "></i></button>
-                                </template>
-                                <template v-else>
-                                    <button @click="activeCategory(category.id)" class="btn btn-sm btn-info">
-                                        <i class="fas fa-check "></i></button>
-                                </template>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <nav>
-                    <ul class="pagination">
-                        <li class="page-item" v-if="pagination.current_page > 1">
-                            <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1, buscar, criterio)">Ant</a>
-                        </li>
-                        <li class="page-item"
-                            v-for="page in pagesNumber" :key="page"
-                            :class="[page == isActived ? 'active' : '']">
-                            <a class="page-link" href="#" @click.prevent="changePage(page, buscar, criterio)">{{ page }}</a>
-                        </li>
-                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                            <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page + 1, buscar, criterio)">Sig</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+            </template>
+            <template v-slot:card-search>
+                <select class="form-control col-md-3" v-model="criterio">
+                    <option value="name">Nombre</option>
+                </select>
+                <input type="text" 
+                    class="form-control" 
+                    placeholder="Texto a buscar" 
+                    v-model="buscar"
+                    @keyup.enter="getAllCategories(1, buscar, criterio)"
+                >
+                <button type="submit" class="btn btn-primary" 
+                    @click="getAllCategories(1, buscar, criterio)">
+                    <i class="fa fa-search"></i> Buscar
+                </button>
+            </template>
+            <template v-slot:table-header>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Estado</th>
+                <th>Opciones</th>   
+            </template>
+            <template v-slot:table-body>
+                <tr v-for="category in categories" :key="category.id">
+                    <td>{{ category.name }}</td>
+                    <td><img :src="`images/categories/${category.image}`" width="40" height="40" alt=""></td>
+                    <td><span class="badge badge-success" v-if="category.status == '1'">activo</span>
+                        <span class="badge badge-warning" v-if="category.status == '0'">inactivo</span></td>
+                    <td>
+                        <button @click="openModal('actualizar', category)" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i></button>
+                        <template v-if="category.status">
+                            <button @click="desactiveCategory(category.id)" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash "></i></button>
+                        </template>
+                        <template v-else>
+                            <button @click="activeCategory(category.id)" class="btn btn-sm btn-info">
+                                <i class="fas fa-check "></i></button>
+                        </template>
+                    </td>
+                </tr>
+            </template>
+        </table-component>
+        <br>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" v-if="pagination.current_page > 1">
+                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1, buscar, criterio)">Ant</a>
+                </li>
+                <li class="page-item"
+                    v-for="page in pagesNumber" :key="page"
+                    :class="[page == isActived ? 'active' : '']">
+                    <a class="page-link" href="#" @click.prevent="changePage(page, buscar, criterio)">{{ page }}</a>
+                </li>
+                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page + 1, buscar, criterio)">Sig</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
 
@@ -148,13 +131,12 @@
        data() {
            return {
                 categories: [],
-                categoryId: 0,
                 category:{
                     name: '',
                     image: null
                 },
                 nameFile:'',
-                mostrarModal:0,
+                showModal:0,
                 modalTitle:0,
                 modalBtnAction:0,
                 buscar:'',
@@ -227,7 +209,6 @@
                 data.append('name',this.category.name);
                 data.append('image',this.category.image);
                 const response = await axios.post('categories/save', data);
-                console.log(response);
                 this.getAllCategories(1,'','name');
                 this.closeModal();
            },
@@ -257,13 +238,14 @@
            openModal(action,data = []){
                switch(action){
                    case 'registrar':{
-                        this.mostrarModal = 1;
+                        this.showModal = 1;
                         this.modalTitle = "Nueva Categoria";
                         this.modalBtnAction = 1;
+                        this.nameFile='';
                    break;
                    }
                    case 'actualizar':{
-                       this.mostrarModal = 1;
+                       this.showModal = 1;
                        this.modalTitle = "Actualizar Categoria";
                        this.modalBtnAction = 2;
                        this.category.name = data['name'];
@@ -274,7 +256,7 @@
                }
            },
            closeModal(){
-                this.mostrarModal = 0;
+                this.showModal = 0;
                 this.modalTitle = '';
                 this.category.name = '',
                 this.category.image = null

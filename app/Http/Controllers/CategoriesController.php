@@ -57,7 +57,6 @@ class CategoriesController extends Controller
 
     public function update(Request $request)
     {
-        return $request;
         if($request->ajax()){
             if($request->option == 'nuevo'){
                 $file = $request->file('image');
@@ -89,8 +88,9 @@ class CategoriesController extends Controller
         ]);
     }
 
-    public function selectCategory($id)
+    public function selectCategory()
     {
-        //
+        $categories = Category::select('id','name')->where('status','1')->get();
+        return $categories;
     }
 }

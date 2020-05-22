@@ -26,3 +26,11 @@ Route::put('/categories/modify','CategoriesController@update');
 Route::put('/categories/active','CategoriesController@active');
 Route::put('/categories/desactive','CategoriesController@desactive');
 Route::get('/category','CategoriesController@selectCategory');
+
+//rutas de la atractivos
+Route::get('/attractives','AttractivesController@index');
+Route::post('/attractives/save','AttractivesController@store');
+Route::get('/attractives/detail','AttractivesController@detail');
+Route::put('/attractives/modify','AttractivesController@update');
+Route::put('/attractives/active','AttractivesController@active');
+Route::put('/attractives/desactive','AttractivesController@desactive');

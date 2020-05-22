@@ -9,8 +9,8 @@
   <link href="img/logo/logo.png" rel="icon">
   <title>Sistema de Promocion turistica</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link href="css/app.css" rel="stylesheet" />
-  <link href="css/plantilla.css" rel="stylesheet" />
+  <link href="{{ asset('css/app.css')}}" rel="stylesheet" />
+  <link href="{{ asset('css/plantilla.css')}}" rel="stylesheet" />
 </head>
 
 <body id="page-top">
@@ -20,7 +20,7 @@
 			<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 				<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
 				  <div class="sidebar-brand-icon">
-					<img src="img/logo2.png">
+					<img src="{{ asset('img/logo2.png') }}">
 				  </div>
 				  <div class="sidebar-brand-text mx-3">RuangAdmin</div>
 				</a>
@@ -55,9 +55,9 @@
 				  </a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="ui-colors.html">
+				  <a class="nav-link" href="/attratives" @click.prevent="menu=2">
 					<i class="fas fa-fw fa-palette"></i>
-					<span>UI Colors</span>
+					<span>Attractives</span>
 				  </a>
 				</li>
 		  
@@ -76,7 +76,7 @@
 						<li class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
-							<img class="img-profile rounded-circle" src="img/boy.png" style="max-width: 60px">
+							<img class="img-profile rounded-circle" src="{{ asset('img/boy.png') }}" style="max-width: 60px">
 							<span class="ml-2 d-none d-lg-inline text-white small">Maman Ketoprak</span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -126,7 +126,7 @@
 		<i class="fas fa-angle-up"></i>
 	</a>		
 
-	<script src="js/app.js"></script>
-	<script src="js/plantilla.js"></script>
+	<script src="{{ asset('js/app.js')}}"></script>
+	<script src="{{ asset('js/plantilla.js')}}"></script>
 </body>
 </html>
