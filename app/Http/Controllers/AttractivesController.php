@@ -67,9 +67,15 @@ class AttractivesController extends Controller
         Attractive::findOrFail($request->id)->update($request->all());
     }
 
-    public function detail(Request $request){
-        $attractive = Attractive::findOrFail($request->id)->with('category')->first();
-        return view('Attractives.detail', compact('attractive'));
+    public function detail(Request $request)
+    {
+        $attractive = Attractive::join('categories','categories.id','=','attractives.category_id')
+                    ->select('attractives.name','attractives.description','attractives.address',
+                             'attractives.longitude','attractives.latitude','attractives.image',
+                             'categories.name as categoryName')
+                    ->where('attractives.id',$request->id)
+                    ->first();
+        return $attractive;
     }
 
     public function desactive(Request $request)
@@ -84,5 +90,14 @@ class AttractivesController extends Controller
         Attractive::findOrFail($request->id)->update([
             'status' => '1'
         ]);
+    }
+
+    public function selectAttractives()
+    {
+        $attractives = Attractive::select('id','name')
+                                ->orderBy('name','desc')
+                                ->get();
+                                
+        return $attractives;
     }
 }

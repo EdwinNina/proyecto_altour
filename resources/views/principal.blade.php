@@ -35,35 +35,38 @@
 				  Features
 				</div>
 				<li class="nav-item">
-				  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
 					aria-expanded="true" aria-controls="collapseBootstrap">
 					<i class="far fa-fw fa-window-maximize"></i>
-					<span>Bootstrap UI</span>
-				  </a>
-				  <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-					  <h6 class="collapse-header">Bootstrap UI</h6>
-					  <a class="collapse-item" href="alerts.html">Alerts</a>
-					  <a class="collapse-item" href="buttons.html">Buttons</a>
+						<span>Bootstrap UI</span>
+					</a>
+					<div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+						<h6 class="collapse-header">Bootstrap UI</h6>
+						<a class="collapse-item" href="alerts.html">Alerts</a>
+						<a class="collapse-item" href="buttons.html">Buttons</a>
+						</div>
 					</div>
-				  </div>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="/categorias" @click.prevent="menu=1">
+					<a class="nav-link" href="/categorias" @click.prevent="menu=1">
 					<i class="fab fa-fw fa-wpforms"></i>
-					<span>Categorias</span>
-				  </a>
+						<span>Categorias</span>
+					</a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="/attratives" @click.prevent="menu=2">
+				  <a class="nav-link" href="/categorias" @click.prevent="menu=2">
 					<i class="fas fa-fw fa-palette"></i>
-					<span>Attractives</span>
+					<span>Atractivos</span>
 				  </a>
-				</li>
-		  
-				<hr class="sidebar-divider">
-				<div class="version" id="version-ruangadmin"></div>
-			  </ul>
+				</li>		  
+				<li class="nav-item">
+				  <a class="nav-link" href="/categorias" @click.prevent="menu=3">
+					<i class="fas fa-fw fa-palette"></i>
+					<span>Actividades</span>
+				  </a>
+				</li>		  
+			</ul>
 		<!-- Sidebar -->
 			<div id="content-wrapper" class="d-flex flex-column">
 				<div id="content">

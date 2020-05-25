@@ -9,4 +9,7 @@
     <template v-if="menu == 2">
         <attractive-component/>
     </template>
+    <template v-if="menu == 3">
+        <activity-component/>
+    </template>
 @endsection

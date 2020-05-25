@@ -12,4 +12,9 @@ class Attractive extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

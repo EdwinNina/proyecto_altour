@@ -77,79 +77,103 @@
                 </template>
             </template>            
         </form-component>
-        <table-component>
-            <template v-slot:card-header>
-                <button type="button" class="btn btn-primary" @click="openModal('registrar')">
-                    <i class="icon-plus"></i>&nbsp;Nuevo
-                </button>
-            </template>
-            <template v-slot:card-search>
-                <select class="form-control col-md-3" v-model="criterio">
-                    <option value="name">Nombre</option>
-                </select>
-                <input type="text" 
-                    class="form-control" 
-                    placeholder="Texto a buscar" 
-                    v-model="buscar"
-                    @keyup.enter="getAllAttractives(1, buscar, criterio)"
-                >
-                <button type="submit" class="btn btn-primary" 
-                    @click="getAllAttractives(1, buscar, criterio)">
-                    <i class="fa fa-search"></i> Buscar
-                </button>
-            </template>
-            <template v-slot:table-header>
-                <th>Categoria</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Dirección</th>
-                <th>Latitud</th>
-                <th>Longitud</th>
-                <th>Imagen</th>
-                <th colspan="3">Opciones</th>
-            </template>
-            <template v-slot:table-body>
-                <tr v-for="attractive in attractives" :key="attractive.id">
-                    <td>{{ attractive.category.name }}</td>
-                    <td>{{ attractive.name }}</td>
-                    <td>{{ attractive.description.substr(0,20)+'...' }}</td>
-                    <td>{{ attractive.address }}</td>
-                    <td>{{ attractive.latitude }}</td>
-                    <td>{{ attractive.longitude }}</td>
-                    <td><img :src="`images/attractives/${attractive.image}`" width="40" height="40" alt=""></td>
-                    <td>
-                        <button @click="openModal('actualizar', attractive)" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i></button>
-                        <button @click="openDetail(attractive.id)" class="btn btn-sm btn-info">
-                            <i class="fas fa-eye"></i></button>
-                        <template v-if="attractive.status">
-                            <button @click="desactiveAttractive(attractive.id)" class=" btn btn-sm btn-danger">
-                                <i class="fas fa-trash "></i></button>
-                        </template>
-                        <template v-else>
-                            <button @click="activeAttractive(attractive.id)" class=" btn btn-sm btn-info">
-                                <i class="fas fa-check "></i></button>
-                        </template>
-                    </td>
-                </tr>
-            </template>
-        </table-component>
-        <br>
-        <nav>
-            <ul class="pagination">
-                <li class="page-item" v-if="pagination.current_page > 1">
-                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1, buscar, criterio)">Ant</a>
-                </li>
-                <li class="page-item"
-                    v-for="page in pagesNumber" :key="page"
-                    :class="[page == isActived ? 'active' : '']">
-                    <a class="page-link" href="#" @click.prevent="changePage(page, buscar, criterio)">{{ page }}</a>
-                </li>
-                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page + 1, buscar, criterio)">Sig</a>
-                </li>
-            </ul>
-        </nav>
+        <template v-if="showContent == 1">
+            <table-component>
+                <template v-slot:card-header>
+                    <button type="button" class="btn btn-primary" @click="openModal('registrar')">
+                        <i class="icon-plus"></i>&nbsp;Nuevo
+                    </button>
+                </template>
+                <template v-slot:card-search>
+                    <select class="form-control col-md-3" v-model="criterio">
+                        <option value="name">Nombre</option>
+                    </select>
+                    <input type="text" 
+                        class="form-control" 
+                        placeholder="Texto a buscar" 
+                        v-model="buscar"
+                        @keyup.enter="getAllAttractives(1, buscar, criterio)"
+                    >
+                    <button type="submit" class="btn btn-primary" 
+                        @click="getAllAttractives(1, buscar, criterio)">
+                        <i class="fa fa-search"></i> Buscar
+                    </button>
+                </template>
+                <template v-slot:table-header>
+                    <th>Categoria</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Dirección</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Imagen</th>
+                    <th colspan="3">Opciones</th>
+                </template>
+                <template v-slot:table-body>
+                    <tr v-for="attractive in attractives" :key="attractive.id">
+                        <td>{{ attractive.category.name }}</td>
+                        <td>{{ attractive.name }}</td>
+                        <td>{{ attractive.description.substr(0,20)+'...' }}</td>
+                        <td>{{ attractive.address }}</td>
+                        <td>{{ attractive.latitude }}</td>
+                        <td>{{ attractive.longitude }}</td>
+                        <td><img :src="`images/attractives/${attractive.image}`" width="40" height="40" alt=""></td>
+                        <td>
+                            <button @click="openModal('actualizar', attractive)" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i></button>
+                            <button @click="openDetail(attractive.id)" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i></button>
+                            <template v-if="attractive.status">
+                                <button @click="desactiveAttractive(attractive.id)" class=" btn btn-sm btn-danger">
+                                    <i class="fas fa-trash "></i></button>
+                            </template>
+                            <template v-else>
+                                <button @click="activeAttractive(attractive.id)" class=" btn btn-sm btn-info">
+                                    <i class="fas fa-check "></i></button>
+                            </template>
+                        </td>
+                    </tr>
+                </template>
+            </table-component>
+            <br>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" v-if="pagination.current_page > 1">
+                        <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1, buscar, criterio)">Ant</a>
+                    </li>
+                    <li class="page-item"
+                        v-for="page in pagesNumber" :key="page"
+                        :class="[page == isActived ? 'active' : '']">
+                        <a class="page-link" href="#" @click.prevent="changePage(page, buscar, criterio)">{{ page }}</a>
+                    </li>
+                    <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                        <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page + 1, buscar, criterio)">Sig</a>
+                    </li>
+                </ul>
+            </nav>
+        </template>
+         <template v-if="showContent == 2">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <img class="card-img-top" :src="`images/attractives/${attractiveDetails.image}`" alt="Card image cap">
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="card-body">
+                            <p class="card-text"><small class="text-primary">Lugar turistico: {{attractiveDetails.categoryName}}</small></p>
+                            <h5 class="card-title"><span class="font-weight-bold">Atractivo:</span> {{attractiveDetails.name}}</h5>
+                            <p class="card-text"><span class="font-weight-bold">Descripcion:</span> {{ attractiveDetails.description}}</p>
+                            <p class="card-text"><span class="font-weight-bold">Dirección:</span> {{ attractiveDetails.address}}</p>
+                            <p class="card-text"><span class="font-weight-bold">Latitude:</span> {{ attractiveDetails.latitude}}</p>
+                            <p class="card-text"><span class="font-weight-bold">Longitude:</span> {{ attractiveDetails.longitude}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <button @click="closeDetail()" class="btn btn-outline-primary"><i class="fas fa-arrow-left"></i> Volver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -162,7 +186,7 @@
            return {
                 attractives: [],
                 categories: [],
-                categoryId: 0,
+                attractiveDetails:[],
                 attractive:{
                     category_id: '',
                     name: '',
@@ -176,6 +200,7 @@
                 showModal:0,
                 modalTitle:0,
                 modalBtnAction:0,
+                showContent:1,
                 buscar:'',
                 criterio:'name',
                 pagination: {
@@ -272,9 +297,11 @@
                    this.closeModal();
                }
            },
-           openDetail(id){
+           async openDetail(id){
                let url = `attractives/detail?id=${id}`
-               window.open(url);
+               const response = await axios.get(url);
+               this.attractiveDetails = response.data;
+               this.showContent = 2; 
            },
            async desactiveAttractive(id){
                const response = await axios.put('attractives/desactive',{ 'id':id });
@@ -320,6 +347,10 @@
                 this.attractive.longitude = '',
                 this.attractive.image = null
                 this.nameFile='';
+           },
+           closeDetail(){
+               this.showContent=1;
+               this.getAllAttractives(1,'','name');
            }
        },
     }

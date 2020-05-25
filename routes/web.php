@@ -34,3 +34,12 @@ Route::get('/attractives/detail','AttractivesController@detail');
 Route::put('/attractives/modify','AttractivesController@update');
 Route::put('/attractives/active','AttractivesController@active');
 Route::put('/attractives/desactive','AttractivesController@desactive');
+Route::get('/attractives/select','AttractivesController@selectAttractives');
+
+//rutas de la atractivos
+Route::get('/activities','ActivityController@index');
+Route::post('/activities/save','ActivityController@store');
+Route::get('/activities/detail','ActivityController@detail');
+Route::put('/activities/modify','ActivityController@update');
+Route::put('/activities/active','ActivityController@active');
+Route::put('/activities/desactive','ActivityController@desactive');
