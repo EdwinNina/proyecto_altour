@@ -11,7 +11,6 @@ mix.styles([
    'resources/assets/plantilla/js/jquery.easing.min.js',
    'resources/assets/plantilla/js/bootstrap.min.js',
    'resources/assets/plantilla/js/ruang-admin.min.js',
-   'resources/assets/plantilla/js/sweetalert2.js',
 ], 'public/js/plantilla.js')
 
 .js(['resources/js/app.js'], 'public/js/app.js')

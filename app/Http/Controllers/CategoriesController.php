@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
 
 class CategoriesController extends Controller
 {
@@ -41,8 +42,8 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(CategoryRequest $request)
+    { 
         if($request->ajax()){
             $file = $request->file('image');
             $file_name = time().$file->getClientOriginalName();
@@ -58,19 +59,24 @@ class CategoriesController extends Controller
     public function update(Request $request)
     {
         if($request->ajax()){
-            if($request->option == 'nuevo'){
+            $category = Category::findOrFail($request->id);
+            
+            if($request->file('image')){
+                $path =  public_path() .'/images/categories/';
+                $url_image = $path.$category->image;
+                unlink($url_image);
+                
                 $file = $request->file('image');
-                $file_name = time().$file->getClientOriginalName();
-                $file->move(public_path().'/images/categories/',$file_name);
-                Category::findOrFail($request->id)->update([
-                    'name' => $request->name,
-                    'image' => $request->$file_name
-                ]);
+                $name = time().$file->getClientOriginalName();
+                $file->move($path,$name);
+                $category->name = $request->name;
+                $category->image = $name;
+                $category->save();
+            }else{
+                $category->name = $request->name;
+                $category->image = $request->image;
+                $category->save();
             }
-            Category::findOrFail($request->id)->update([
-                'name' => $request->name,
-                'image' => $request->image
-            ]);
         }
     }
 

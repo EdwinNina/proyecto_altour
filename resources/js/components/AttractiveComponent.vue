@@ -1,9 +1,7 @@
 <template>
     <div>
         <form-component :showModal="showModal">
-            <template v-slot:title>
-                Attractivos
-            </template>
+            <template v-slot:title>Administracion de Atractivos</template>
             <template v-slot:modal-header>
                 <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeModal()">
@@ -16,18 +14,31 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="categories">Categoria</label>
-                                <select class="custom-select" id="categories" v-model="attractive.category_id">
+                                <select class="custom-select" id="categories" 
+                                        v-model="attractive.category_id" v-has-error="errors.category_id"
+                                        :class="[verifyCategory ? 'is-valid': '']">
                                     <option value="" disabled>Seleccionar...</option>
                                     <option v-for="category in categories"
                                         :key="category.id" 
                                         :value="category.id">{{ category.name }}</option>
                                 </select>
+                                <template v-if="verifyCategory">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="name">Nombre</label>
-                                <input type="text" id="name" pattern="[A-Za-z]" class="form-control" required v-model="attractive.name">
+                                <input type="text" id="name" pattern="[A-Za-z]" class="form-control" required 
+                                    v-model="attractive.name" v-has-error="errors.name" :class="[verifyName ? 'is-valid': '']">
+                                <template v-if="verifyName">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -35,13 +46,25 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="address">Direccion</label>
-                                <input type="text" id="address" class="form-control" required v-model="attractive.address">
+                                <input type="text" id="address" class="form-control" required 
+                                    v-model="attractive.address" v-has-error="errors.address" :class="[verifyAddress ? 'is-valid': '']">
+                                <template v-if="verifyAddress">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="description">Descripcion</label>
-                                <input type="text" id="description" class="form-control" required v-model="attractive.description">
+                                <input type="text" id="description" class="form-control" required 
+                                    v-model="attractive.description" v-has-error="errors.description" :class="[verifyDescription ? 'is-valid': '']">
+                                <template v-if="verifyDescription">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -49,30 +72,47 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="latitude">Latitud</label>
-                                <input type="text" id="latitude" class="form-control" required v-model="attractive.latitude">
+                                <input type="text" id="latitude" class="form-control" required 
+                                    v-model="attractive.latitude" v-has-error="errors.latitude" :class="[verifyLatitude ? 'is-valid': '']">
+                                <template v-if="verifyLatitude">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="longitude">Longitud</label>
-                                <input type="text" id="longitude" class="form-control" required v-model="attractive.longitude">
+                                <input type="text" id="longitude" class="form-control" required 
+                                    v-model="attractive.longitude" v-has-error="errors.longitude" :class="[verifyLongitude ? 'is-valid': '']">
+                                <template v-if="verifyLongitude">
+                                    <div class="valid-feedback">
+                                        Campo ingresado correctamente
+                                    </div>                                    
+                                </template>
                             </div>
                         </div>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" @change="getImage($event)">
-                        <label class="custom-file-label" for="image">Seleccionar imagen</label>
+                        <input type="file" class="custom-file-input" id="image" @change="getImage($event)" v-has-error="errors.image">
+                        <template v-if="verifyImage">
+                            <div class="valid-feedback">
+                                Campo ingresado correctamente
+                            </div>                                    
+                        </template>
+                        <label class="custom-file-label" for="image" :class="[verifyImage ? 'is-valid': '']">Seleccionar imagen</label>
                     </div>
                     <span v-if="nameFile!=''" class="file-message text-primary">La imagen seleccionada es: {{nameFile}}</span>
                 </form>
             </template>
             <template v-slot:modal-footer>
                 <template v-if="modalBtnAction == 1">
-                    <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
-                    <button type="button" class="btn btn-primary" @click="saveAttractive()">Registrar</button>
+                    <button type="button" class="btn btn-outline-danger" @click="closeModal()">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @click="saveAttractive()" :disabled="btnDisable">{{btnText}}</button>
                 </template>
                 <template v-if="modalBtnAction == 2">
-                    <button type="button" class="btn btn-default" @click="closeModal()">Cancelar</button>
+                    <button type="button" class="btn btn-outline-danger" @click="closeModal()">Cancelar</button>
                     <button type="button" class="btn btn-primary" @click="modifyAttractive()">Actualizar</button>
                 </template>
             </template>            
@@ -124,11 +164,11 @@
                             <button @click="openDetail(attractive.id)" class="btn btn-sm btn-info">
                                 <i class="fas fa-eye"></i></button>
                             <template v-if="attractive.status">
-                                <button @click="desactiveAttractive(attractive.id)" class=" btn btn-sm btn-danger">
+                                <button @click="desactiveAttractive(attractive.id,attractive.name)" class=" btn btn-sm btn-danger">
                                     <i class="fas fa-trash "></i></button>
                             </template>
                             <template v-else>
-                                <button @click="activeAttractive(attractive.id)" class=" btn btn-sm btn-info">
+                                <button @click="activeAttractive(attractive.id,attractive.name)" class=" btn btn-sm btn-success">
                                     <i class="fas fa-check "></i></button>
                             </template>
                         </td>
@@ -152,7 +192,7 @@
                 </ul>
             </nav>
         </template>
-         <template v-if="showContent == 2">
+        <template v-if="showContent == 2">
             <div class="card">
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
@@ -187,6 +227,7 @@
                 attractives: [],
                 categories: [],
                 attractiveDetails:[],
+                errors:[],
                 attractive:{
                     category_id: '',
                     name: '',
@@ -212,9 +253,11 @@
                     'to'           : 0
                 },
                 offset: 3,
+                btnDisable:false,
+                btnText:'Registrar'
            }
        },
-       computed: {
+        computed: {
             isActived() {
                 return this.pagination.current_page; 
             },
@@ -238,8 +281,64 @@
                     from++;
                 }
                 return pagesArray;
-            }
-       },
+            },
+            verifyCategory() {
+                if(this.attractive.category_id != ""){
+                    delete this.errors['category_id'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyName() {
+                if(this.attractive.name != ""){
+                    delete this.errors['name'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyDescription() {
+                if(this.attractive.description != ""){
+                    delete this.errors['description'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyAddress() {
+                if(this.attractive.address != ""){
+                    delete this.errors['address'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyLatitude() {
+                if(this.attractive.latitude != ""){
+                    delete this.errors['latitude'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyLongitude() {
+                if(this.attractive.longitude != ""){
+                    delete this.errors['longitude'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+            verifyImage() {
+                if(this.attractive.image != ""){
+                    delete this.errors['image'];
+                    return true;           
+                }else{
+                    return false;
+                }
+            },
+        },
         methods: {
             async getAllAttractives(page,buscar,criterio) {
                let url = `attractives?page=${page}&buscar=${buscar}&criterio=${criterio}`;
@@ -257,12 +356,13 @@
                 //envia la peticion para visualizar la data de la pagina
                 this.getAllAttractives(page, buscar, criterio)
             },
-
             getImage(e){
                this.nameFile = e.target.files[0].name;
                this.attractive.image = e.target.files[0];
             },
-            async saveAttractive(){
+            saveAttractive(){
+                this.btnText="Registrando...";
+                this.btnDisable=true;
                 const data = new FormData();
                 data.append('category_id',this.attractive.category_id);
                 data.append('name',this.attractive.name);
@@ -271,46 +371,88 @@
                 data.append('latitude',this.attractive.latitude);
                 data.append('longitude',this.attractive.longitude);
                 data.append('image',this.attractive.image);
-                const response = await axios.post('attractives/save', data);
-                this.getAllAttractives(1,'','name');
-                this.closeModal();
-           },
-           async modifyAttractive(){
-               if(this.nameFile != ''){
-                    let formdata = new FormData();
-                    formdata.append('category_id',this.attractive.category_id);
-                    formdata.append('name', this.attractive.name);
-                    formdata.append('description',this.attractive.description);
-                    formdata.append('address',this.attractive.address);
-                    formdata.append('latitude',this.attractive.latitude);
-                    formdata.append('longitude',this.attractive.longitude);
-                    formdata.append('option','nuevaImagen');
-                    formdata.append('prueba','hola');
-                    console.log('formdata '+formdata);
-                    const response = await axios.patch('attractives/modify', formdata);
-                   console.log(response);
-                   this.closeModal();
-               }else{
-                   const response = await axios.put('attractives/modify',this.attractive);
-                   console.log(response);
-                   this.getAllAttractives(1,'','name');
-                   this.closeModal();
-               }
-           },
-           async openDetail(id){
+                axios.post('attractives/save', data)
+                    .then((response) => {
+                        this.errors=[];
+                        this.btnDisable=false;
+                        this.btnText="Registrar";
+                        this.getAllAttractives(1,'','name');
+                        this.closeModal();
+                    }).catch((error) => {
+                        if(error.response.status == 422) {
+                            this.errors = error.response.data.errors;
+                            this.btnDisable=false;
+                            this.btnText="Registrar";
+                        }
+                    })
+            },
+            async modifyAttractive(){
+					let formdata = new FormData();
+					formdata.append('id',this.attractive.id);
+					formdata.append('category_id',this.attractive.category_id);
+					formdata.append('name', this.attractive.name);
+					formdata.append('description',this.attractive.description);
+					formdata.append('address',this.attractive.address);
+					formdata.append('latitude',this.attractive.latitude);
+					formdata.append('longitude',this.attractive.longitude);
+					formdata.append('image',this.attractive.image);
+					const response = await axios.post('attractives/modify', formdata);
+					console.log(response);
+					this.getAllAttractives(1,'','name');
+					this.closeModal();
+            },
+            async openDetail(id){
                let url = `attractives/detail?id=${id}`
                const response = await axios.get(url);
                this.attractiveDetails = response.data;
                this.showContent = 2; 
-           },
-           async desactiveAttractive(id){
-               const response = await axios.put('attractives/desactive',{ 'id':id });
-               this.getAllAttractives(1,'','name');
-           },
-           async activeAttractive(id){
-               const response = await axios.put('attractives/active',{ 'id':id });
-               this.getAllAttractives(1,'','name');
-           },
+            },
+            desactiveAttractive(id,name){
+                Swal.fire({
+                title: `Esta seguro de desactivar el attractivo ${name}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Aceptar!",
+                cancelButtonText: "Cancelar!"
+                }).then(result => {
+                    if (result.value) {
+                        axios.put("attractives/desactive", { id: id })
+                            .then(response => {
+                                this.getAllAttractives(1,'','name');
+                                Swal.fire(
+                                    "Activado!",
+                                    "El atractivo ha sido desactivado con exito",
+                                    "success"
+                                );
+                            });
+                    }
+                });
+            },
+            activeAttractive(id,name){
+                Swal.fire({
+                title: `Esta seguro de activar el attractivo ${name}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Aceptar!",
+                cancelButtonText: "Cancelar!"
+                }).then(result => {
+                    if (result.value) {
+                        axios.put("attractives/active", { id: id })
+                            .then(response => {
+                                this.getAllAttractives(1,'','name');
+                                Swal.fire(
+                                    "Activado!",
+                                    "El atractivo ha sido activado con exito",
+                                    "success"
+                                );
+                            });
+                    }
+                });
+            },
             openModal(action,data = []){
                 switch(action){
                     case 'registrar':{
@@ -321,25 +463,26 @@
                     break;
                     }
                     case 'actualizar':{
-                       this.showModal = 1;
-                       this.modalTitle = "Actualizar Atractivo";
-                       this.modalBtnAction = 2;
-                       this.attractive.category_id = data['category_id'];
-                       this.attractive.name = data['name'];
-                       this.attractive.description = data['description'];
-                       this.attractive.address = data['address'];
-                       this.attractive.latitude = data['latitude'];
-                       this.attractive.longitude = data['longitude'];
-                       this.attractive.image = data['image'];
-                       this.attractive.id = data['id'];
+                        this.showModal = 1;
+                        this.modalTitle = "Actualizar Atractivo";
+                        this.modalBtnAction = 2;
+                        this.attractive.category_id = data['category_id'];
+                        this.attractive.name = data['name'];
+                        this.attractive.description = data['description'];
+                        this.attractive.address = data['address'];
+                        this.attractive.latitude = data['latitude'];
+                        this.attractive.longitude = data['longitude'];
+                        this.attractive.image = data['image'];
+                        this.attractive.id = data['id'];
                     break;
                     }
-               }
-               this.getAllCategories();
-           },
-           closeModal(){
+                }
+                this.getAllCategories();
+            },
+            closeModal(){
                 this.showModal = 0;
                 this.modalTitle = '';
+                this.attractive.category_id = '',
                 this.attractive.name = '',
                 this.attractive.description = '',
                 this.attractive.address = '',
@@ -347,23 +490,18 @@
                 this.attractive.longitude = '',
                 this.attractive.image = null
                 this.nameFile='';
-           },
-           closeDetail(){
-               this.showContent=1;
-               this.getAllAttractives(1,'','name');
-           }
-       },
+                this.errors=[];
+            },
+            closeDetail(){
+                this.showContent=1;
+                this.getAllAttractives(1,'','name');
+            }
+        },
     }
 </script>
 
 <style>
     .file-message{
         font-size: .8rem;
-    }
-    .icono{
-        font-size: 1.2rem;
-    }
-    .opcionDesactivar{
-        margin-left: -3em;
     }
 </style>

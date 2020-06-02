@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Attractive;
 use Illuminate\Http\Request;
+use App\Http\Requests\AttractiveRequest;
 
 class AttractivesController extends Controller
 {
@@ -31,7 +32,7 @@ class AttractivesController extends Controller
         ];
     }
 
-    public function store(Request $request)
+    public function store(AttractiveRequest $request)
     {
         $file = $request->file('image');
         $file_name = time().$file->getClientOriginalName();
@@ -49,22 +50,29 @@ class AttractivesController extends Controller
 
     public function update(Request $request)
     {
-        return $request['prueba'];
-        if($request->option == 'nuevaImagen'){
-            $file = $request->file('image');
-            $file_name = time().$file->getClientOriginalName();
-            $file->move(public_path().'/images/categories/',$file_name);
-            Attractive::findOrFail($request->id)->update([
-                'category_id' => $request['category_id'],
-                'name' => $request['name'],
-                'description' => $request['description'],
-                'address' => $request['address'],
-                'latitude' => $request['latitude'],
-                'longitude' => $request['longitude'],
-                'image' => $file_name,
-            ]);
+        if($request->ajax()){
+            $attractive = Attractive::findOrFail($request->id);
+            if($request->file('image')){
+
+                $path_url = public_path().'/images/attractives/';
+                unlink($path_url.$attractive->image);
+                
+                $file = $request->file('image');
+                $file_name = time().$file->getClientOriginalName();
+                $file->move($path_url,$file_name);
+
+                $attractive->category_id = $request->category_id;
+                $attractive->name = $request->name;
+                $attractive->description = $request->description;
+                $attractive->address = $request->address;
+                $attractive->latitude = $request->latitude;
+                $attractive->longitude = $request->longitude;
+                $attractive->image = $file_name;
+                $attractive->save();
+            }else{
+                Attractive::findOrFail($request->id)->update($request->all());
+            }
         }
-        Attractive::findOrFail($request->id)->update($request->all());
     }
 
     public function detail(Request $request)

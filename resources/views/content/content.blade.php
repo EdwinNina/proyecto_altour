@@ -12,4 +12,10 @@
     <template v-if="menu == 3">
         <activity-component/>
     </template>
+    <template v-if="menu == 4">
+        <calendar-component/>
+    </template>
+    <template v-if="menu == 5">
+        <user-component/>
+    </template>
 @endsection
