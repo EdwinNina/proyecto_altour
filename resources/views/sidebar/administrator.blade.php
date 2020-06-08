@@ -1,48 +1,76 @@
-<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-   <a href="index.html" class="sidebar-brand d-flex align-items-center justify-content-center">
-      <div class="sidebar-brand-icon">
-         <img src="img/logo2.png">
-      </div> 
-      <div class="sidebar-brand-text mx-3">Altour</div>
-   </a>
-   <hr class="sidebar-divider my-0">
-   <li class="nav-item active">
-     <a class="nav-link" href="/principal" @click.prevent="menu=0">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span></a>
-   </li>
-   <hr class="sidebar-divider">
-   <div class="sidebar-heading">
-     Mantenimiento
-   </div>
-   <li class="nav-item">
-      <a class="nav-link" href="/categorias" @click.prevent="menu=1">
-      <i class="fab fa-fw fa-wpforms"></i>
-         <span>Categorias</span>
-      </a>
-   </li>
-   <li class="nav-item">
-     <a class="nav-link" href="/categorias" @click.prevent="menu=2">
-      <i class="fas fa-fw fa-palette"></i>
-      <span>Atractivos</span>
-     </a>
-   </li>		  
-   <li class="nav-item">
-     <a class="nav-link" href="/categorias" @click.prevent="menu=3">
-      <i class="fas fa-fw fa-palette"></i>
-      <span>Actividades</span>
-     </a>
-   </li>   
-   <li class="nav-item">
-     <a class="nav-link" href="/calendario" @click.prevent="menu=4">
-      <i class="fas fa-fw fa-palette"></i>
-      <span>Calendario actividades</span>
-     </a>
-   </li>   
-   <li class="nav-item">
-     <a class="nav-link" href="/usuarios" @click.prevent="menu=5">
-      <i class="fas fa-fw fa-users"></i>
-      <span>Usuarios</span>
-     </a>
-   </li>   
-</ul>
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+  <li class="nav-item nav-profile">
+    <a href="#" class="nav-link">
+      <div class="nav-profile-image">
+      <img src="{{ asset('img/faces/face1.jpg')}}" alt="profile">
+      <span class="login-status online"></span>
+      <!--change to offline or busy as needed-->
+      </div>
+      <div class="nav-profile-text d-flex flex-column">
+      <span class="font-weight-bold mb-2">{{Auth::user()->name}}</span>
+      <span class="text-secondary text-small">Adminstrador</span>
+      </div>
+      <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" @click.prevent="menu=0">
+      <span class="menu-title">Dashboard</span>
+      <i class="mdi mdi-home menu-icon"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" @click.prevent="menu=1">
+      <span class="menu-title">Categorias</span>
+      <i class="mdi mdi-contacts menu-icon"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" @click.prevent="menu=2">
+      <span class="menu-title">Atractivos</span>
+      <i class="mdi mdi-contacts menu-icon"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" @click.prevent="menu=3">
+      <span class="menu-title">Lugares turisticos</span>
+      <i class="mdi mdi-contacts menu-icon"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="collapse" href="#events" aria-expanded="false" aria-controls="events">
+      <span class="menu-title">Planificacion Eventos</span>
+      <i class="menu-arrow"></i>
+      <i class="mdi mdi-lock menu-icon"></i>
+    </a>
+    <div class="collapse" id="events">
+      <ul class="nav flex-column sub-menu">
+      <li class="nav-item"> <a class="nav-link" href="#" @click.prevent="menu=4">Actividades</a></li>
+      <li class="nav-item"> <a class="nav-link" href="#" @click.prevent="menu=5">Calendario Actividades</a></li>
+      </ul>
+    </div>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" @click.prevent="menu=6">
+      <span class="menu-title">Lista de turistas</span>
+      <i class="mdi mdi-contacts menu-icon"></i>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="collapse" href="#access" aria-expanded="false" aria-controls="access">
+      <span class="menu-title">Acceso</span>
+      <i class="menu-arrow"></i>
+      <i class="mdi mdi-lock menu-icon"></i>
+    </a>
+    <div class="collapse" id="access">
+      <ul class="nav flex-column sub-menu">
+      <li class="nav-item"> 
+        <a class="nav-link" href="#" @click.prevent="menu=7">Usuarios</a>
+        <a class="nav-link" href="#" @click.prevent="menu=8">Roles</a>
+      </li>
+      </ul>
+    </div>
+  </li>
+  </ul>
+</nav>

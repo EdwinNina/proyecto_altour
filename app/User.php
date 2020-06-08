@@ -37,13 +37,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function attractives()
-    {
-        return $this->belongsToMany(Attractive::class);
-    }
-
     public function role()
     {
         return $this->hasOne(Role::class);
+    }
+
+    public function places()
+    {
+        return $this->belongsToMany(Place::class);
     }
 }

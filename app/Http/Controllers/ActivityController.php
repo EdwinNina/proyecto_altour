@@ -11,6 +11,7 @@ class ActivityController extends Controller
 
     public function index(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $buscar = $request->buscar;
         $criterio = $request->criterio;
         
@@ -34,11 +35,14 @@ class ActivityController extends Controller
 
     public function store(ActivityRequest $request)
     {
+        if(!$request->ajax()) return redirect('/');
         Activity::create($request->all());
     }
 
     public function detail(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $activity = Activity::join('attractives','attractives.id','=','activities.attractive_id')
                     ->select('activities.name','activities.description','activities.instructor',
                              'activities.cost','activities.date_start','activities.date_end',
@@ -50,6 +54,8 @@ class ActivityController extends Controller
 
     public function update(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Activity::findOrFail($request->id)->update($request->all());
     }
 
@@ -61,6 +67,8 @@ class ActivityController extends Controller
     }
     public function active(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Activity::findOrFail($request->id)->update([
             'status' => 1
         ]);
@@ -68,6 +76,8 @@ class ActivityController extends Controller
 
     public function selectDates()
     {
+        if(!$request->ajax()) return redirect('/');
+
         $activities = Activity::select('name as title','date_start as start','date_end as end')->where('status','1')->get();
         return $activities;
     }

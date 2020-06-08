@@ -15,12 +15,9 @@ class CreateAttractivesTable extends Migration
     {
         Schema::create('attractives', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('category_id');
-            $table->string('name', 100);
-            $table->text('description');
-            $table->string('address', 100);
-            $table->double('latitude', 8,4);
-            $table->double('longitude',8,4);
+            $table->unsignedBigInteger('category_id'); 
+            $table->string('name', 100); 
+            $table->text('description'); 
             $table->string('image');
             $table->boolean('status')->default(1);
             $table->timestamps();

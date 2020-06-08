@@ -11,6 +11,8 @@ class AttractivesController extends Controller
 
     public function index(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
@@ -34,6 +36,8 @@ class AttractivesController extends Controller
 
     public function store(AttractiveRequest $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $file = $request->file('image');
         $file_name = time().$file->getClientOriginalName();
         $file->move(public_path().'/images/attractives/',$file_name);
@@ -41,45 +45,40 @@ class AttractivesController extends Controller
             'category_id' => $request['category_id'],
             'name' => $request['name'],
             'description' => $request['description'],
-            'address' => $request['address'],
-            'latitude' => $request['latitude'],
-            'longitude' => $request['longitude'],
             'image' => $file_name,
         ]);
     }
 
     public function update(Request $request)
     {
-        if($request->ajax()){
-            $attractive = Attractive::findOrFail($request->id);
-            if($request->file('image')){
+        if(!$request->ajax()) return redirect('/');
 
-                $path_url = public_path().'/images/attractives/';
-                unlink($path_url.$attractive->image);
-                
-                $file = $request->file('image');
-                $file_name = time().$file->getClientOriginalName();
-                $file->move($path_url,$file_name);
+        $attractive = Attractive::findOrFail($request->id);
+        if($request->file('image')){
 
-                $attractive->category_id = $request->category_id;
-                $attractive->name = $request->name;
-                $attractive->description = $request->description;
-                $attractive->address = $request->address;
-                $attractive->latitude = $request->latitude;
-                $attractive->longitude = $request->longitude;
-                $attractive->image = $file_name;
-                $attractive->save();
-            }else{
-                Attractive::findOrFail($request->id)->update($request->all());
-            }
+            $path_url = public_path().'/images/attractives/';
+            unlink($path_url.$attractive->image);
+            
+            $file = $request->file('image');
+            $file_name = time().$file->getClientOriginalName();
+            $file->move($path_url,$file_name);
+
+            $attractive->category_id = $request->category_id;
+            $attractive->name = $request->name;
+            $attractive->description = $request->description;
+            $attractive->image = $file_name;
+            $attractive->save();
+        }else{
+            Attractive::findOrFail($request->id)->update($request->all());
         }
     }
 
     public function detail(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $attractive = Attractive::join('categories','categories.id','=','attractives.category_id')
-                    ->select('attractives.name','attractives.description','attractives.address',
-                             'attractives.longitude','attractives.latitude','attractives.image',
+                    ->select('attractives.name','attractives.description','attractives.image',
                              'categories.name as categoryName')
                     ->where('attractives.id',$request->id)
                     ->first();
@@ -88,6 +87,8 @@ class AttractivesController extends Controller
 
     public function desactive(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Attractive::findOrFail($request->id)->update([
             'status' => '0'
         ]);
@@ -95,17 +96,10 @@ class AttractivesController extends Controller
 
     public function active(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Attractive::findOrFail($request->id)->update([
             'status' => '1'
         ]);
-    }
-
-    public function selectAttractives()
-    {
-        $attractives = Attractive::select('id','name')
-                                ->orderBy('name','desc')
-                                ->get();
-                                
-        return $attractives;
     }
 }

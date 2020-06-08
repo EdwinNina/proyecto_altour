@@ -10,12 +10,21 @@
         <attractive-component/>
     </template>
     <template v-if="menu == 3">
-        <activity-component/>
+        <place-component/>
     </template>
     <template v-if="menu == 4">
-        <calendar-component/>
+        <activity-component/>
     </template>
     <template v-if="menu == 5">
+        <calendar-component/>
+    </template>
+    <template v-if="menu == 6">
+        <tourist-component/>
+    </template>
+    <template v-if="menu == 7">
         <user-component/>
+    </template>
+    <template v-if="menu == 8">
+        <role-component/>
     </template>
 @endsection

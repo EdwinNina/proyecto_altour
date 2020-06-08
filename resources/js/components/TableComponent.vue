@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-sm align-items-center">
+                <table class="table table-striped align-items-center">
                     <thead class="text-center">
                         <tr>
                             <slot name="table-header"/>

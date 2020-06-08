@@ -1,85 +1,81 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link href="img/logo/logo.png" rel="icon">
-  <title>Sistema de Promocion turistica</title>
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link href="{{ asset('css/app.css')}}" rel="stylesheet" />
-  <link href="{{ asset('css/plantilla.css')}}" rel="stylesheet" />
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Sistema de Promocion turistica</title>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<link href="{{ asset('css/app.css')}}" rel="stylesheet" />
+	<link href="{{ asset('css/plantilla.css')}}" rel="stylesheet" />
+	<link rel="shortcut icon" href="{{ asset('img/favicon.png')}}" />
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
-
 <body id="page-top">
 	<div id="app">
-		<div id="wrapper">
-			<!-- Sidebar -->
-				@include('./sidebar.administrator')
-			<!-- Sidebar -->
-			<div id="content-wrapper" class="d-flex flex-column">
-				<div id="content">
-				<!-- TopBar -->
-					<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
-						<button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
-						<i class="fa fa-bars"></i>
-						</button>
-						<ul class="navbar-nav ml-auto">
-						<li class="nav-item dropdown no-arrow">
-							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">
-							<img class="img-profile rounded-circle" src="{{ asset('img/boy.png') }}" style="max-width: 60px">
-							<span class="ml-2 d-none d-lg-inline text-white small">Maman Ketoprak</span>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-								Profile
-							</a>
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-								Settings
-							</a>
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-								Activity Log
-							</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="login.html">
-								<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-								Logout
-							</a>
+		<div class="container-scroller">
+			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+					<a class="navbar-brand brand-logo" href="#" @click.prevent="menu=0">ALTOUR</a>
+					<a class="navbar-brand brand-logo-mini" href="#" @click.prevent="menu=0"><img src="{{ asset('img/logo-mini.svg')}}" alt="logo" /></a>
+				</div>
+				<div class="navbar-menu-wrapper d-flex align-items-stretch">
+					<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+					<span class="mdi mdi-menu"></span>
+					</button>
+					<ul class="navbar-nav navbar-nav-right">
+					<li class="nav-item nav-profile dropdown">
+						<a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+							<div class="nav-profile-img">
+							<img src="{{ asset('img/faces/face1.jpg')}}" alt="image">
+							<span class="availability-status online"></span>
 							</div>
-						</li>
-						</ul>
-					</nav>
-				<!-- Topbar -->
-				<!-- Container Fluid-->
-					<div class="container-fluid" id="container-wrapper">
+							<div class="nav-profile-text">
+							<p class="mb-1 text-black">{{ Auth::user()->name }}</p>
+							</div>
+						</a>
+						<div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+							<a class="dropdown-item" href="{{ route('logout') }}"
+								onclick="event.preventDefault();
+									document.getElementById('logout-form').submit();">
+								{{ __('Logout') }}
+							</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								@csrf
+							</form>
+						</div>
+					</li>
+					</ul>
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+					<span class="mdi mdi-menu"></span>
+					</button>
+				</div>
+			</nav>
+			<!-- partial -->
+			<div class="container-fluid page-body-wrapper">
+				<!-- partial:partials/_sidebar.html -->
+				@if (Auth::check())
+					@if (Auth::user()->role_id == 1)
+						@include('sidebar.administrator')  
+					@endif
+					@if (Auth::user()->role_id == 2)
+						@include('sidebar.organizator')
+				 	@endif
+				@endif
+				<!-- partial -->
+				<div class="main-panel">
+					<div class="content-wrapper">
 						@yield('content')
 					</div>
-				<!---Container Fluid-->
-				</div>
-				<!-- Footer -->
-				<footer class="sticky-footer bg-white">
-					<div class="container my-auto">
-						<div class="copyright text-center my-auto">
-						<span>Todos los derechos reservados
-							<b><a href="#" target="_blank">Altour</a></b>
-						</span>
-						</div>
+					<footer class="footer">
+					<div class="d-sm-flex justify-content-center justify-content-sm-between">
+						<span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="#" target="_blank">ALTOUR</a>. All rights reserved.</span>
+						<span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Sistema de Promocion y gestion Altour <i class="mdi mdi-heart text-danger"></i></span>
 					</div>
-				</footer>
-				<!-- Footer -->
+					</footer>
+				</div>
 			</div>
 		</div>	
 	</div>
-	<a class="scroll-to-top rounded" href="#page-top">
-		<i class="fas fa-angle-up"></i>
-	</a>		
-
 	<script src="{{ asset('js/app.js')}}"></script>
 	<script src="{{ asset('js/plantilla.js')}}"></script>
 </body>

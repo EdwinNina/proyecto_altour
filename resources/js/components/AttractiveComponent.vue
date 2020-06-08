@@ -14,7 +14,7 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="categories">Categoria</label>
-                                <select class="custom-select" id="categories" 
+                                <select class="form-control" id="categories" 
                                         v-model="attractive.category_id" v-has-error="errors.category_id"
                                         :class="[verifyCategory ? 'is-valid': '']">
                                     <option value="" disabled>Seleccionar...</option>
@@ -43,50 +43,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <div class="form-group">
-                                <label class="form-control-label" for="address">Direccion</label>
-                                <input type="text" id="address" class="form-control" required 
-                                    v-model="attractive.address" v-has-error="errors.address" :class="[verifyAddress ? 'is-valid': '']">
-                                <template v-if="verifyAddress">
-                                    <div class="valid-feedback">
-                                        Campo ingresado correctamente
-                                    </div>                                    
-                                </template>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
+                        <div class="col-md-12 col-sm-12">
                             <div class="form-group">
                                 <label class="form-control-label" for="description">Descripcion</label>
                                 <input type="text" id="description" class="form-control" required 
                                     v-model="attractive.description" v-has-error="errors.description" :class="[verifyDescription ? 'is-valid': '']">
                                 <template v-if="verifyDescription">
-                                    <div class="valid-feedback">
-                                        Campo ingresado correctamente
-                                    </div>                                    
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <div class="form-group">
-                                <label class="form-control-label" for="latitude">Latitud</label>
-                                <input type="text" id="latitude" class="form-control" required 
-                                    v-model="attractive.latitude" v-has-error="errors.latitude" :class="[verifyLatitude ? 'is-valid': '']">
-                                <template v-if="verifyLatitude">
-                                    <div class="valid-feedback">
-                                        Campo ingresado correctamente
-                                    </div>                                    
-                                </template>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <div class="form-group">
-                                <label class="form-control-label" for="longitude">Longitud</label>
-                                <input type="text" id="longitude" class="form-control" required 
-                                    v-model="attractive.longitude" v-has-error="errors.longitude" :class="[verifyLongitude ? 'is-valid': '']">
-                                <template v-if="verifyLongitude">
                                     <div class="valid-feedback">
                                         Campo ingresado correctamente
                                     </div>                                    
@@ -143,9 +105,6 @@
                     <th>Categoria</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th>Dirección</th>
-                    <th>Latitud</th>
-                    <th>Longitud</th>
                     <th>Imagen</th>
                     <th colspan="3">Opciones</th>
                 </template>
@@ -154,22 +113,19 @@
                         <td>{{ attractive.category.name }}</td>
                         <td>{{ attractive.name }}</td>
                         <td>{{ attractive.description.substr(0,20)+'...' }}</td>
-                        <td>{{ attractive.address }}</td>
-                        <td>{{ attractive.latitude }}</td>
-                        <td>{{ attractive.longitude }}</td>
                         <td><img :src="`images/attractives/${attractive.image}`" width="40" height="40" alt=""></td>
                         <td>
                             <button @click="openModal('actualizar', attractive)" class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i></button>
+                                <i class="mdi mdi-pencil"></i></button>
                             <button @click="openDetail(attractive.id)" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i></button>
+                                <i class="mdi mdi-eye"></i></button>
                             <template v-if="attractive.status">
                                 <button @click="desactiveAttractive(attractive.id,attractive.name)" class=" btn btn-sm btn-danger">
-                                    <i class="fas fa-trash "></i></button>
+                                    <i class="mdi mdi-delete "></i></button>
                             </template>
                             <template v-else>
                                 <button @click="activeAttractive(attractive.id,attractive.name)" class=" btn btn-sm btn-success">
-                                    <i class="fas fa-check "></i></button>
+                                    <i class="mdi mdi-check "></i></button>
                             </template>
                         </td>
                     </tr>
@@ -200,12 +156,9 @@
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <div class="card-body">
-                            <p class="card-text"><small class="text-primary">Lugar turistico: {{attractiveDetails.categoryName}}</small></p>
-                            <h5 class="card-title"><span class="font-weight-bold">Atractivo:</span> {{attractiveDetails.name}}</h5>
-                            <p class="card-text"><span class="font-weight-bold">Descripcion:</span> {{ attractiveDetails.description}}</p>
-                            <p class="card-text"><span class="font-weight-bold">Dirección:</span> {{ attractiveDetails.address}}</p>
-                            <p class="card-text"><span class="font-weight-bold">Latitude:</span> {{ attractiveDetails.latitude}}</p>
-                            <p class="card-text"><span class="font-weight-bold">Longitude:</span> {{ attractiveDetails.longitude}}</p>
+                            <p class="card-text"><small class="text-primary">Categoria: {{attractiveDetails.categoryName}}</small></p>
+                            <h5 class="card-title"><span class="font-weight-bold">{{attractiveDetails.name}}</span></h5>
+                            <p class="card-text">{{ attractiveDetails.description}}</p>
                         </div>
                         <div class="card-footer">
                             <button @click="closeDetail()" class="btn btn-outline-primary"><i class="fas fa-arrow-left"></i> Volver</button>
@@ -232,9 +185,6 @@
                     category_id: '',
                     name: '',
                     description: '',
-                    address: '',
-                    latitude: '',
-                    longitude: '',
                     image: null
                 },
                 nameFile:'',
@@ -367,9 +317,6 @@
                 data.append('category_id',this.attractive.category_id);
                 data.append('name',this.attractive.name);
                 data.append('description',this.attractive.description);
-                data.append('address',this.attractive.address);
-                data.append('latitude',this.attractive.latitude);
-                data.append('longitude',this.attractive.longitude);
                 data.append('image',this.attractive.image);
                 axios.post('attractives/save', data)
                     .then((response) => {
@@ -387,19 +334,16 @@
                     })
             },
             async modifyAttractive(){
-					let formdata = new FormData();
-					formdata.append('id',this.attractive.id);
-					formdata.append('category_id',this.attractive.category_id);
-					formdata.append('name', this.attractive.name);
-					formdata.append('description',this.attractive.description);
-					formdata.append('address',this.attractive.address);
-					formdata.append('latitude',this.attractive.latitude);
-					formdata.append('longitude',this.attractive.longitude);
-					formdata.append('image',this.attractive.image);
-					const response = await axios.post('attractives/modify', formdata);
-					console.log(response);
-					this.getAllAttractives(1,'','name');
-					this.closeModal();
+                let formdata = new FormData();
+                formdata.append('id',this.attractive.id);
+                formdata.append('category_id',this.attractive.category_id);
+                formdata.append('name', this.attractive.name);
+                formdata.append('description',this.attractive.description);
+                formdata.append('image',this.attractive.image);
+                const response = await axios.post('attractives/modify', formdata);
+                console.log(response);
+                this.getAllAttractives(1,'','name');
+                this.closeModal();
             },
             async openDetail(id){
                let url = `attractives/detail?id=${id}`
@@ -469,9 +413,6 @@
                         this.attractive.category_id = data['category_id'];
                         this.attractive.name = data['name'];
                         this.attractive.description = data['description'];
-                        this.attractive.address = data['address'];
-                        this.attractive.latitude = data['latitude'];
-                        this.attractive.longitude = data['longitude'];
                         this.attractive.image = data['image'];
                         this.attractive.id = data['id'];
                     break;
@@ -485,9 +426,6 @@
                 this.attractive.category_id = '',
                 this.attractive.name = '',
                 this.attractive.description = '',
-                this.attractive.address = '',
-                this.attractive.latitude = '',
-                this.attractive.longitude = '',
                 this.attractive.image = null
                 this.nameFile='';
                 this.errors=[];

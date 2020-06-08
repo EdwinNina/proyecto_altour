@@ -175,16 +175,16 @@
                         </td>
                         <td>
                             <button @click="openModal('actualizar', activity)" class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i></button>
+                                <i class="mdi mdi-pencil"></i></button>
                             <button @click="openDetail(activity.id)" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i></button>
+                                <i class="mdi mdi-eye"></i></button>
                             <template v-if="activity.status">
                                 <button @click="desactiveActivity(activity.id,activity.name)" class=" btn btn-sm btn-danger">
-                                    <i class="fas fa-trash "></i></button>
+                                    <i class="mdi mdi-delete"></i></button>
                             </template>
                             <template v-else>
                                 <button @click="activeActivity(activity.id,activity.name)" class=" btn btn-sm btn-success">
-                                    <i class="fas fa-check "></i></button>
+                                    <i class="mdi mdi-check"></i></button>
                             </template>
                         </td>
                     </tr>

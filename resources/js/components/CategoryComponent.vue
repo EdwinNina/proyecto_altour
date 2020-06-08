@@ -143,16 +143,16 @@
                     </td>
                     <td>
                         <button @click="openModal('actualizar', category)" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i>
+                            <i class="mdi mdi-pencil"></i>
                         </button>
                         <template v-if="category.status">
                             <button @click="desactiveCategory(category.id,category.name)" class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
+                                <i class="mdi mdi-delete"></i>
                             </button>
                         </template>
                         <template v-else>
                             <button @click="activeCategory(category.id,category.name)" class="btn btn-sm btn-success">
-                                <i class="fas fa-check"></i>
+                                <i class="mdi mdi-check"></i>
                             </button>
                         </template>
                     </td>

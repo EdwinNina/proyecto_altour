@@ -15,15 +15,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
         if($buscar == ""){
             $users = User::join('roles','roles.id','=','users.role_id')
+                    ->where('roles.name','!=','turista')
                     ->select('users.id','users.name','users.email','users.status','users.role_id','roles.name as role')
                     ->orderBy('users.id','desc')->paginate(5);
         }else{
             $users = User::join('roles','roles.id','=','users.role_id')
+                    ->where('roles.name','!=','turista')
                     ->select('users.id','users.name','users.email','users.status','users.role_id','roles.name as role')
                     ->where($criterio,'like','%'.$buscar.'%')
                     ->orderBy('users.id','desc')->paginate(5);
@@ -40,6 +44,37 @@ class UserController extends Controller
             ]
         ];
     }
+    public function selectTourists(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == ""){
+            $tourists = User::join('roles','roles.id','=','users.role_id')
+                    ->where('roles.name','=','turista')
+                    ->select('users.id','users.name','users.email','users.status','roles.name as role')
+                    ->orderBy('users.id','desc')->paginate(5);
+        }else{
+            $tourists = User::join('roles','roles.id','=','users.role_id')
+                    ->where('roles.name','!=','turista')
+                    ->select('users.id','users.name','users.email','users.status','users.role_id','roles.name as role')
+                    ->where($criterio,'like','%'.$buscar.'%')
+                    ->orderBy('users.id','desc')->paginate(5);
+        }
+        return [
+            'tourists' => $tourists,
+            'pagination' => [
+                'total' => $tourists->total(),
+                'current_page' => $tourists->currentPage(),
+                'per_page' => $tourists->perPage(),
+                'last_page' => $tourists->lastPage(),
+                'from' => $tourists->firstItem(),
+                'to' => $tourists->lastItem(),
+            ]
+        ];
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,14 +84,14 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        if($request->ajax()){
-            User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role_id' => $request->role_id
-            ]);            
-        }
+        if(!$request->ajax()) return redirect('/');
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id' => $request->role_id
+        ]);            
     }
 
     /**
@@ -68,18 +103,20 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        if($request->ajax()){
-            User::findOrFail($request->id)->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role_id' => $request->role_id
-            ]);
-        }
+        if(!$request->ajax()) return redirect('/');
+
+        User::findOrFail($request->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id' => $request->role_id
+        ]);
     }
 
     public function destroy(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         User::findOrFail($request->id)->delete();
     }
 }

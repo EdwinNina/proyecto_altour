@@ -18,6 +18,6 @@ class RoleTableSeeder extends Seeder
         DB::table('roles')->insert([
             'name' => 'organizador',
             'description' => 'encargado de realizar las actividades'
-        ]);
+        ]); 
     }
 }

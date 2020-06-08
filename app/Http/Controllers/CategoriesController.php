@@ -15,6 +15,8 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
@@ -44,51 +46,55 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     { 
-        if($request->ajax()){
-            $file = $request->file('image');
-            $file_name = time().$file->getClientOriginalName();
-            $file->move(public_path().'/images/categories/',$file_name);
+        if(!$request->ajax()) return redirect('/');
 
-            $category = new Category();
-            $category->name = $request['name'];
-            $category->image = $file_name;
-            $category->save();
-        }
+        $file = $request->file('image');
+        $file_name = time().$file->getClientOriginalName();
+        $file->move(public_path().'/images/categories/',$file_name);
+
+        $category = new Category();
+        $category->name = $request['name'];
+        $category->image = $file_name;
+        $category->save();
     }
 
     public function update(Request $request)
     {
-        if($request->ajax()){
-            $category = Category::findOrFail($request->id);
+        if(!$request->ajax()) return redirect('/');
+
+        $category = Category::findOrFail($request->id);
+        
+        if($request->file('image')){
+            $path =  public_path() .'/images/categories/';
+            $url_image = $path.$category->image;
+            unlink($url_image);
             
-            if($request->file('image')){
-                $path =  public_path() .'/images/categories/';
-                $url_image = $path.$category->image;
-                unlink($url_image);
-                
-                $file = $request->file('image');
-                $name = time().$file->getClientOriginalName();
-                $file->move($path,$name);
-                $category->name = $request->name;
-                $category->image = $name;
-                $category->save();
-            }else{
-                $category->name = $request->name;
-                $category->image = $request->image;
-                $category->save();
-            }
+            $file = $request->file('image');
+            $name = time().$file->getClientOriginalName();
+            $file->move($path,$name);
+            $category->name = $request->name;
+            $category->image = $name;
+            $category->save();
+        }else{
+            $category->name = $request->name;
+            $category->image = $request->image;
+            $category->save();
         }
     }
 
 
     public function active(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Category::findOrFail($request->id)->update([
             'status' => '1'
         ]);
     }
     public function desactive(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Category::findOrFail($request->id)->update([
             'status' => '0'
         ]);

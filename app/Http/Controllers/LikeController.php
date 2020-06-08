@@ -35,6 +35,8 @@ class LikeController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Like::where('user_id', Auth::user()->id)
         ->where('attractive_id',$request->id)
         ->create([
@@ -50,6 +52,8 @@ class LikeController extends Controller
 
     public function disLike(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
+
         Like::where('user_id', Auth::user()->id)
             ->where('attractive_id',$request->id)
             ->delete();

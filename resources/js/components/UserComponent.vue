@@ -86,7 +86,7 @@
                      <div class="col-md-6 col-sm-12">
                         <div class="form-group">
                            <label class="form-control-label" for="role">Rol</label>
-                           <select id="role" class="custom-select" v-model="user.role_id" :class="[verifyRole ? 'is-valid' : '']" v-has-error="errors.name">
+                           <select id="role" class="form-control" v-model="user.role_id" :class="[verifyRole ? 'is-valid' : '']" v-has-error="errors.name">
                               <option value="0" disabled>Seleccionar...</option>
                               <option :value="role.id" v-for="role in roles" :key="role.id">{{ role.name }}</option>
                            </select>
@@ -150,10 +150,10 @@
                     </td>
                     <td>
                         <button @click="openModal('actualizar', user)" class="btn btn-sm btn-warning">
-                           <i class="fas fa-edit"></i>
+                           <i class="mdi mdi-pencil"></i>
                         </button>
                         <button @click="deleteUser(user.id,user.name)" class="btn btn-sm btn-danger">
-                           <i class="fas fa-trash"></i>
+                           <i class="mdi mdi-delete"></i>
                         </button>
                     </td>
                 </tr>
